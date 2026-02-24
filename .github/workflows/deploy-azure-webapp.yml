@@ -49,19 +49,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to Azure Web App
+      - name: Configure App Settings
         run: |
-          az webapp deploy \
-            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
-            --name "${{ env.AZURE_WEBAPP_NAME }}" \
-            --src-path release.zip \
-            --type zip
-
-          az webapp config set \
-            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
-            --name "${{ env.AZURE_WEBAPP_NAME }}" \
-            --startup-file "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
-
           az webapp config appsettings set \
             --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
             --name "${{ env.AZURE_WEBAPP_NAME }}" \
@@ -71,3 +60,13 @@ jobs:
               OPENAI_IMAGE_MODEL="${{ secrets.OPENAI_IMAGE_MODEL }}" \
               OPENAI_IMAGE_SIZE="${{ secrets.OPENAI_IMAGE_SIZE }}" \
               OPENAI_TIMEOUT_SECONDS="${{ secrets.OPENAI_TIMEOUT_SECONDS }}"
+
+      - name: Deploy to Azure Web App
+        run: |
+          az webapp deploy \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AZURE_WEBAPP_NAME }}" \
+            --src-path release.zip \
+            --type zip \
+            --restart false \
+            --track-status false

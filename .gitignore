@@ -7,6 +7,10 @@ __pycache__/
 
 data/
 appservice-logs/
+*-appservice-logs/
+latest-appservice-logs/
+LogFiles/
+*.log
 *.zip
 .azure/
 azure-credentials.json
