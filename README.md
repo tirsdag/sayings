@@ -35,16 +35,17 @@ It deploys to:
 - `sayingsweb749787` (Azure App Service)
 
 Setup required in GitHub repository settings:
-1. Add secret `AZURE_WEBAPP_PUBLISH_PROFILE`
-2. Put the Azure publish profile XML as the secret value.
+1. Add secret `AZURE_CREDENTIALS`
+2. Set it to Service Principal JSON from Azure CLI.
 
-You can fetch the publish profile from Azure CLI:
+Create the Service Principal JSON (scoped to this resource group):
 
 ```bash
-az webapp deployment list-publishing-profiles \
-  --name sayingsweb749787 \
-  --resource-group rg-sayings-app \
-  --xml
+az ad sp create-for-rbac \
+  --name "github-sayings-deploy" \
+  --role contributor \
+  --scopes /subscriptions/b48f9cca-dd2b-472d-8955-a7e6b8e180d2/resourceGroups/rg-sayings-app \
+  --json-auth
 ```
 
 Triggering deploy:
