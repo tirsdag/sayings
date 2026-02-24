@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sayings Image Generator</title>
+    <link rel="stylesheet" href="/static/css/styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header>
+        <h1>Sayings Image Generator</h1>
+        <p>Manage sayings and generate an image from prompt templates using <code>%1</code>.</p>
+      </header>
+
+      <section class="panel">
+        <h2>Add Saying</h2>
+        <form id="createForm">
+          <label>
+            Saying
+            <input id="sayingInput" required />
+          </label>
+          <label>
+            Prompt (use %1 placeholder)
+            <textarea id="promptInput" rows="3" required></textarea>
+          </label>
+          <button type="submit">Create</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="row between">
+          <h2>Sayings</h2>
+          <div class="row">
+            <button id="exportBtn" type="button">Export JSON</button>
+            <label class="import-label" for="importFile">Import JSON</label>
+            <input id="importFile" type="file" accept="application/json" />
+          </div>
+        </div>
+        <div id="status" class="status"></div>
+        <div id="list" class="list"></div>
+      </section>
+    </main>
+
+    <template id="itemTemplate">
+      <article class="card">
+        <label>
+          Saying
+          <input class="edit-saying" />
+        </label>
+        <label>
+          Prompt
+          <textarea class="edit-prompt" rows="3"></textarea>
+        </label>
+        <div class="row">
+          <button class="save-btn" type="button">Save</button>
+          <button class="gen-btn" type="button">Generate</button>
+          <button class="del-btn" type="button">Delete</button>
+          <a class="download-btn" target="_blank" rel="noopener">Download</a>
+        </div>
+        <img class="preview" alt="Generated preview" />
+      </article>
+    </template>
+
+    <script src="/static/js/app.js" type="module"></script>
+  </body>
+</html>

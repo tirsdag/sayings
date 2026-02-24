@@ -1,0 +1,127 @@
+:root {
+  --bg: #f5efe6;
+  --surface: #fffaf0;
+  --ink: #15231f;
+  --accent: #2f7f5f;
+  --danger: #8f3030;
+  --border: #dbc9ad;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top right, #e8d8be, var(--bg));
+  color: var(--ink);
+}
+
+.layout {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+form,
+.card {
+  display: grid;
+  gap: 10px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-weight: 600;
+}
+
+input,
+textarea,
+button,
+.import-label {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+}
+
+button,
+.import-label {
+  cursor: pointer;
+  background: #f7f1e5;
+}
+
+button:hover,
+.import-label:hover {
+  border-color: var(--accent);
+}
+
+.list {
+  display: grid;
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  background: #fff;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.between {
+  justify-content: space-between;
+}
+
+.preview {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 8px;
+  display: none;
+  border: 1px solid var(--border);
+}
+
+.download-btn {
+  display: none;
+  text-decoration: none;
+  color: #fff;
+  background: var(--accent);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.del-btn {
+  color: #fff;
+  background: var(--danger);
+}
+
+#importFile {
+  display: none;
+}
+
+.status {
+  min-height: 1.3rem;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .layout {
+    padding: 12px;
+  }
+}

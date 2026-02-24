@@ -1,0 +1,12 @@
+{
+  "sayings": [
+    {
+      "saying": "Håber er løsegrønt",
+      "prompt": "Create a nordic-inspired poster with this saying: %1"
+    },
+    {
+      "saying": "Det er helt naturligt",
+      "prompt": "Minimalist botanical artwork featuring the phrase: %1"
+    }
+  ]
+}
