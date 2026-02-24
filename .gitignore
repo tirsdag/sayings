@@ -9,6 +9,7 @@ data/
 appservice-logs/
 *-appservice-logs/
 latest-appservice-logs/
+gha-deploy-logs/
 LogFiles/
 *.log
 *.zip

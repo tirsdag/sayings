@@ -68,5 +68,22 @@ jobs:
             --name "${{ env.AZURE_WEBAPP_NAME }}" \
             --src-path release.zip \
             --type zip \
+            --async true \
             --restart false \
             --track-status false
+
+      - name: Wait for App Health
+        run: |
+          set -e
+          APP_URL="https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/"
+          for i in $(seq 1 40); do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$APP_URL" || true)
+            if [ "$code" = "200" ]; then
+              echo "App is healthy (HTTP 200)."
+              exit 0
+            fi
+            echo "Attempt $i/40: app not ready yet (HTTP $code). Waiting 15s..."
+            sleep 15
+          done
+          echo "App did not become healthy within 10 minutes."
+          exit 1
