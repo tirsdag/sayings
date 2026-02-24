@@ -61,3 +61,13 @@ jobs:
             --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
             --name "${{ env.AZURE_WEBAPP_NAME }}" \
             --startup-file "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+          az webapp config appsettings set \
+            --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+            --name "${{ env.AZURE_WEBAPP_NAME }}" \
+            --settings \
+              OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+              OPENAI_BASE_URL="${{ secrets.OPENAI_BASE_URL }}" \
+              OPENAI_IMAGE_MODEL="${{ secrets.OPENAI_IMAGE_MODEL }}" \
+              OPENAI_IMAGE_SIZE="${{ secrets.OPENAI_IMAGE_SIZE }}" \
+              OPENAI_TIMEOUT_SECONDS="${{ secrets.OPENAI_TIMEOUT_SECONDS }}"

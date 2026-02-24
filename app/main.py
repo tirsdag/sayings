@@ -160,7 +160,10 @@ def generate_saying_image(saying_id: int) -> SayingOut:
             raise HTTPException(status_code=404, detail="Saying not found")
 
         final_prompt = f"{context_md}\n{row.prompt.replace('%1', row.saying)}".strip()
-        new_image_path = generator.generate_image(saying_id=row.id, prompt=final_prompt)
+        try:
+            new_image_path = generator.generate_image(saying_id=row.id, prompt=final_prompt)
+        except RuntimeError as exc:
+            raise HTTPException(status_code=502, detail=str(exc)) from exc
         row.image_path = f"/images/{new_image_path.name}"
         row.updated_at = datetime.utcnow()
         session.commit()
