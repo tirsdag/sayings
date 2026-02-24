@@ -45,7 +45,7 @@ az ad sp create-for-rbac \
   --name "github-sayings-deploy" \
   --role contributor \
   --scopes /subscriptions/b48f9cca-dd2b-472d-8955-a7e6b8e180d2/resourceGroups/rg-sayings-app \
-  --json-auth
+  --sdk-auth
 ```
 
 Triggering deploy:
