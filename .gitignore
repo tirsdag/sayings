@@ -9,6 +9,7 @@ data/
 appservice-logs/
 *.zip
 .azure/
+azure-credentials.json
 
 .DS_Store
 Thumbs.db
