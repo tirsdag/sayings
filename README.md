@@ -54,12 +54,6 @@ It deploys to:
 Setup required in GitHub repository settings:
 1. Add secret `AZURE_CREDENTIALS`
 2. Set it to Service Principal JSON from Azure CLI.
-3. Add secret `OPENAI_API_KEY` (required for image generation).
-4. Optionally add secrets:
-   - `OPENAI_BASE_URL`
-   - `OPENAI_IMAGE_MODEL`
-   - `OPENAI_IMAGE_SIZE`
-   - `OPENAI_TIMEOUT_SECONDS`
 
 Create the Service Principal JSON (scoped to this resource group):
 
@@ -74,3 +68,29 @@ az ad sp create-for-rbac \
 Triggering deploy:
 - Push to `main`, or
 - Run workflow manually via `workflow_dispatch`.
+
+Important:
+- The workflow only deploys code.
+- Configure Azure App Settings/startup command separately (one-time), to avoid deployment interruption from SCM restarts.
+
+Example one-time Azure setup:
+
+```bash
+az webapp config set \
+  --resource-group rg-sayings-app \
+  --name sayingsweb749787 \
+  --startup-file "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+az webapp config appsettings set \
+  --resource-group rg-sayings-app \
+  --name sayingsweb749787 \
+  --settings \
+    SCM_DO_BUILD_DURING_DEPLOYMENT=true \
+    ENABLE_ORYX_BUILD=true \
+    WEBSITE_RUN_FROM_PACKAGE=0 \
+    OPENAI_API_KEY="<your-key>" \
+    OPENAI_BASE_URL="https://api.openai.com/v1" \
+    OPENAI_IMAGE_MODEL="gpt-image-1" \
+    OPENAI_IMAGE_SIZE="1024x1024" \
+    OPENAI_TIMEOUT_SECONDS="120"
+```
