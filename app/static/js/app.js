@@ -7,39 +7,66 @@ const promptInput = document.getElementById("promptInput");
 const exportBtn = document.getElementById("exportBtn");
 const importFile = document.getElementById("importFile");
 
+async function parseResponse(response) {
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch {
+    payload = null;
+  }
+
+  if (!response.ok) {
+    const detail =
+      (payload && (payload.detail || payload.message || payload.error)) ||
+      `Request failed with status ${response.status}`;
+    throw new Error(detail);
+  }
+
+  return payload;
+}
+
 const api = {
   async getSayings() {
-    return fetch("/api/sayings").then((r) => r.json());
+    const r = await fetch("/api/sayings");
+    return parseResponse(r);
   },
   async create(payload) {
-    return fetch("/api/sayings", {
+    const r = await fetch("/api/sayings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-    }).then((r) => r.json());
+    });
+    return parseResponse(r);
   },
   async update(id, payload) {
-    return fetch(`/api/sayings/${id}`, {
+    const r = await fetch(`/api/sayings/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-    }).then((r) => r.json());
+    });
+    return parseResponse(r);
   },
   async remove(id) {
-    return fetch(`/api/sayings/${id}`, { method: "DELETE" });
+    const r = await fetch(`/api/sayings/${id}`, { method: "DELETE" });
+    if (!r.ok) {
+      throw new Error(`Delete failed with status ${r.status}`);
+    }
   },
   async generate(id) {
-    return fetch(`/api/sayings/${id}/generate`, { method: "POST" }).then((r) => r.json());
+    const r = await fetch(`/api/sayings/${id}/generate`, { method: "POST" });
+    return parseResponse(r);
   },
   async exportData() {
-    return fetch("/api/export").then((r) => r.json());
+    const r = await fetch("/api/export");
+    return parseResponse(r);
   },
   async importData(payload) {
-    return fetch("/api/import", {
+    const r = await fetch("/api/import", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-    }).then((r) => r.json());
+    });
+    return parseResponse(r);
   },
 };
 
@@ -98,8 +125,8 @@ function renderItem(item) {
       item = updated;
       applyImage(item.image_path);
       setStatus(`Generated image for #${item.id}`);
-    } catch {
-      setStatus("Generation failed", true);
+    } catch (err) {
+      setStatus(`Generation failed: ${err.message || "Unknown error"}`, true);
     } finally {
       genBtn.disabled = false;
     }
