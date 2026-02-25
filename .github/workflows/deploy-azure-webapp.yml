@@ -42,7 +42,16 @@ jobs:
                ".github/*" \
                ".venv/*" \
                "__pycache__/*" \
-               "data/*"
+               "data/*" \
+               "appservice-logs/*" \
+               "latest-appservice-logs/*" \
+               "gha-deploy-logs/*" \
+               "*-appservice-logs/*" \
+               "LogFiles/*" \
+               "*.log" \
+               "*.zip" \
+               ".azure/*" \
+               "azure-credentials.json"
 
       - name: Azure Login
         uses: azure/login@v2
@@ -76,14 +85,14 @@ jobs:
         run: |
           set -e
           APP_URL="https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/"
-          for i in $(seq 1 40); do
+          for i in $(seq 1 80); do
             code=$(curl -s -o /dev/null -w "%{http_code}" "$APP_URL" || true)
             if [ "$code" = "200" ]; then
               echo "App is healthy (HTTP 200)."
               exit 0
             fi
-            echo "Attempt $i/40: app not ready yet (HTTP $code). Waiting 15s..."
+            echo "Attempt $i/80: app not ready yet (HTTP $code). Waiting 15s..."
             sleep 15
           done
-          echo "App did not become healthy within 10 minutes."
+          echo "App did not become healthy within 20 minutes."
           exit 1
