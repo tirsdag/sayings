@@ -16,11 +16,11 @@ class ImageGenerator:
         self.images_dir = images_dir
         self.images_dir.mkdir(parents=True, exist_ok=True)
 
-        self.api_key = os.getenv("OPENAI_API_KEY", "").strip()
-        self.base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-        self.model = os.getenv("OPENAI_IMAGE_MODEL", "gpt-image-1")
-        self.size = os.getenv("OPENAI_IMAGE_SIZE", "1024x1024")
-        self.timeout = int(os.getenv("OPENAI_TIMEOUT_SECONDS", "120"))
+        self.api_key = (os.getenv("OPENAI_API_KEY") or "").strip()
+        self.base_url = (os.getenv("OPENAI_BASE_URL") or "https://api.openai.com/v1").rstrip("/")
+        self.model = (os.getenv("OPENAI_IMAGE_MODEL") or "gpt-image-1").strip()
+        self.size = (os.getenv("OPENAI_IMAGE_SIZE") or "1024x1024").strip()
+        self.timeout = self._read_int_env("OPENAI_TIMEOUT_SECONDS", default=120)
 
     def generate_image(self, saying_id: int, prompt: str) -> Path:
         if not self.api_key:
@@ -82,3 +82,16 @@ class ImageGenerator:
                 raise RuntimeError("Image API returned URL but image download failed.") from exc
 
         raise RuntimeError("Image API response contained no image data.")
+
+    @staticmethod
+    def _read_int_env(name: str, default: int) -> int:
+        raw = os.getenv(name)
+        if raw is None:
+            return default
+        raw = raw.strip()
+        if not raw:
+            return default
+        try:
+            return int(raw)
+        except ValueError:
+            return default

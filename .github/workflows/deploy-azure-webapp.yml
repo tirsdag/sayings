@@ -46,9 +46,11 @@ jobs:
                "appservice-logs/*" \
                "latest-appservice-logs/*" \
                "gha-deploy-logs/*" \
+               "startup-check/*" \
                "*-appservice-logs/*" \
                "LogFiles/*" \
                "*.log" \
+               "*.trace" \
                "*.zip" \
                ".azure/*" \
                "azure-credentials.json"

@@ -10,8 +10,10 @@ appservice-logs/
 *-appservice-logs/
 latest-appservice-logs/
 gha-deploy-logs/
+startup-check/
 LogFiles/
 *.log
+*.trace
 *.zip
 .azure/
 azure-credentials.json
